@@ -1,0 +1,65 @@
+{
+"FindDentist_Input":
+[
+  {
+    "location": "Sugar Land, TX",
+    "zip code": 77478,
+    "distance": 5,
+    "specialty": "General Practice"
+  },
+  {
+    "location": "Sugar Land, TX",
+    "zip code": 77478,
+    "distance": 30,
+    "specialty": "Orthodontics"
+  },
+  {
+    "location": "Sugar Land, TX",
+    "zip code": 77478,
+    "distance": 30,
+    "specialty": "Periodontics"
+  },
+  {
+    "location": "Sugar Hill, GA",
+    "zip code": 30518,
+    "distance": 30,
+    "specialty": "Endodontics"
+  },
+  {
+    "location": "Sugar Hill, GA",
+    "zip code": 30518,
+    "distance": 30,
+    "specialty": "Pediatric Dentistry"
+  },
+  {
+    "location": "Sugar Hill, GA",
+    "zip code": 30518,
+    "distance": 5,
+    "specialty": "General Practice"
+  },
+  {
+    "location": "atlanta, GA",
+    "zip code": 30314,
+    "distance": 5,
+    "specialty": "General Practice"
+  },
+  {
+    "location": "atlanta, GA",
+    "zip code": 30315,
+    "distance": 5,
+    "specialty": "General Practice"
+  },
+  {
+    "location": "atlanta, GA",
+    "zip code": 30311,
+    "distance": 5,
+    "specialty": "General Practice"
+  },
+  {
+    "location": "atlanta, GA",
+    "zip code": 30311,
+    "distance": 10,
+    "specialty": "Orthodontics"
+  }
+]
+}

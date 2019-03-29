@@ -1,0 +1,225 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "FindDentist_Output"
+  ],
+  "properties": {
+    "FindDentist_Output": {
+      "$id": "#/properties/FindDentist_Output",
+      "type": "array",
+      "title": "The Finddentist_output Schema",
+      "items": {
+        "$id": "#/properties/FindDentist_Output/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "Dentist Name",
+          "Specialty",
+          "ProfieImage_URL",
+          "language",
+          "Education",
+          "Gender",
+          "Contact Info",
+          "Proximity"
+        ],
+        "properties": {
+          "Dentist Name": {
+            "$id": "#/properties/FindDentist_Output/items/properties/Dentist Name",
+            "type": "string",
+            "title": "The Dentist name Schema",
+            "default": "",
+            "examples": [
+              "Dr. Lela Dekanosidze"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "Specialty": {
+            "$id": "#/properties/FindDentist_Output/items/properties/Specialty",
+            "type": "string",
+            "title": "The Specialty Schema",
+            "default": "",
+            "examples": [
+              "General Practice"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "ProfieImage_URL": {
+            "$id": "#/properties/FindDentist_Output/items/properties/ProfieImage_URL",
+            "type": "string",
+            "title": "The Profieimage_url Schema",
+            "default": "",
+            "examples": [
+              "https://findadentist.ada.org/ca/los-angeles/beverly-hills/general-practice/dr-lela-dekanosidze-1474840"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "website": {
+            "$id": "#/properties/FindDentist_Output/items/properties/website",
+            "type": "string",
+            "title": "The Website Schema",
+            "default": "",
+            "examples": [
+              "http://www.drmaddahi.com/"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "language": {
+            "$id": "#/properties/FindDentist_Output/items/properties/language",
+            "type": "array",
+            "title": "The Language Schema",
+            "items": {
+              "$id": "#/properties/FindDentist_Output/items/properties/language/items",
+              "type": "string",
+              "title": "The Items Schema",
+              "default": "",
+              "examples": [
+                "English",
+                "Spanish"
+              ],
+              "pattern": "^(.*)$"
+            }
+          },
+          "Education": {
+            "$id": "#/properties/FindDentist_Output/items/properties/Education",
+            "type": "string",
+            "title": "The Education Schema",
+            "default": "",
+            "examples": [
+              "University of Southern California"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "Gender": {
+            "$id": "#/properties/FindDentist_Output/items/properties/Gender",
+            "type": "string",
+            "title": "The Gender Schema",
+            "default": "",
+            "examples": [
+              "Male"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "Payment Options": {
+            "$id": "#/properties/FindDentist_Output/items/properties/Payment Options",
+            "type": "array",
+            "title": "The Payment options Schema",
+            "default": null,
+            "items": {
+              "$id": "#/properties/FindDentist_Output/items/properties/Payment Options/items",
+              "type": "string",
+              "title": "The Items Schema",
+              "default": "",
+              "examples": [
+                "Out-of-network",
+                "files claim",
+                "CareCredit",
+                "Financing",
+                "Cash/Check"
+              ],
+              "pattern": "^(.*)$"
+            }
+          },
+          "Contact Info": {
+            "$id": "#/properties/FindDentist_Output/items/properties/Contact Info",
+            "type": "object",
+            "title": "The Contact info Schema",
+            "required": [
+              "Phone",
+              "Address",
+              "City",
+              "State",
+              "Zip"
+            ],
+            "properties": {
+              "Phone": {
+                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/Phone",
+                "type": "string",
+                "title": "The Phone Schema",
+                "default": "",
+                "examples": [
+                  "(310) 275-1137"
+                ],
+                "pattern": "^(.*)$"
+              },
+              "Address": {
+                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/Address",
+                "type": "string",
+                "title": "The Address Schema",
+                "default": "",
+                "examples": [
+                  "435 N Bedford Dr Ste 306 Beverly Hills, CA 90210-4344"
+                ],
+                "pattern": "^(.*)$"
+              },
+              "City": {
+                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/City",
+                "type": "string",
+                "title": "The City Schema",
+                "default": "",
+                "examples": [
+                  "Beverly Hills"
+                ],
+                "pattern": "^(.*)$"
+              },
+              "State": {
+                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/State",
+                "type": "string",
+                "title": "The State Schema",
+                "default": "",
+                "examples": [
+                  "CA"
+                ],
+                "pattern": "^(.*)$"
+              },
+              "Zip": {
+                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/Zip",
+                "type": "string",
+                "title": "The Zip Schema",
+                "default": "",
+                "examples": [
+                  "90210-4344"
+                ],
+                "pattern": "^(.*)$"
+              }
+            }
+          },
+          "Proximity": {
+            "$id": "#/properties/FindDentist_Output/items/properties/Proximity",
+            "type": "object",
+            "title": "The Proximity Schema",
+            "default": null,
+            "properties": {
+              "Distance": {
+                "$id": "#/properties/FindDentist_Output/items/properties/Proximity/properties/Distance",
+                "type": "string",
+                "title": "The Distance Schema",
+                "default": "",
+                "examples": [
+                  "0.1"
+                ],
+                "pattern": "^(.*)$"
+              },
+              "InputZip": {
+                "$id": "#/properties/FindDentist_Output/items/properties/Proximity/properties/InputZip",
+                "type": "string",
+                "title": "The Inputzip Schema",
+                "default": "",
+                "examples": [
+                  "90210"
+                ],
+                "pattern": "^(.*)$"
+              }
+            },
+            "required": [
+              "InputZip"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
