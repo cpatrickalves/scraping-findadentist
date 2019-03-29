@@ -99,6 +99,14 @@ venv.bak/
 
 # mkdocs documentation
 /site
+/trash
 
 # mypy
 .mypy_cache/
+
+# Windows
+*.ini
+*.PNG
+*.zip
+*.png
+*.exe
