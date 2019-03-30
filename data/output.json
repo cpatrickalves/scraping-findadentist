@@ -1,0 +1,87 @@
+{
+    "FindDentist_Output": [
+        {
+            "Dentist Name": "Dr. Carol A Edwards",
+            "Specialty": "General Practice",
+            "ProfieImage_URL": "findadentist.ada.org/Images/Profile/115500-Dr-Carol-Edwards.png",
+            "website": "drcarolannedwards.com",
+            "language": [
+                "English"
+            ],
+            "Education": "University of Texas School of Dentistry at Houston",
+            "Gender": "Female",
+            "Payment Options": [
+                "Accepts in-network insurance",
+                "Credit/Debit Card"
+            ],
+            "Contact Info": {
+                "Phone": "(281) 201-2642",
+                "Address": "1449 Highway 6 Ste 220 Sugar Land, TX 77478-5114",
+                "City": "Sugar Land",
+                "State": "TX",
+                "Zip": "77478-5114"
+            },
+            "Proximity": {
+                "Distance": "???",
+                "InputZip": "???"
+            }
+        },
+        {
+            "Dentist Name": "Dr. Alan Imrek",
+            "Specialty": "General Practice",
+            "ProfieImage_URL": "findadentist.ada.org/Images/Profile/93531-Dr-Alan-Imrek.png",
+            "website": "www.dentistsugarland.com",
+            "language": [
+                "Farsi",
+                "French",
+                "Spanish",
+                "Urdu"
+            ],
+            "Education": "University of Texas School of Dentistry at Houston",
+            "Gender": "Male",
+            "Payment Options": [],
+            "Contact Info": {
+                "Phone": "(281) 494-3368",
+                "Address": "1730 Williams Trace Blvd Ste E Sugar Land, TX 77478-4055",
+                "City": "Sugar Land",
+                "State": "TX",
+                "Zip": "77478-4055"
+            },
+            "Proximity": {
+                "Distance": "???",
+                "InputZip": "???"
+            }
+        },
+        {
+            "Dentist Name": "Dr Robert L Clitheroe",
+            "Specialty": "General Practice",
+            "ProfieImage_URL": "findadentist.ada.org/Images/Profile/93215-Dr-Robert-Clitheroe.png",
+            "website": "www.rlcdds.com",
+            "language": [
+                "Spanish",
+                "English"
+            ],
+            "Education": "University of Texas School of Dentistry at Houston",
+            "Gender": "Male",
+            "Payment Options": [
+                "Credit/Debit Card",
+                "Financing",
+                "Out-of-network, files claim",
+                "CareCredit",
+                "Workers Comp",
+                "Cash/Check"
+            ],
+            "Contact Info": {
+                "Phone": "(281) 265-9393",
+                "Address": "1716 Dulles Ave Ste 101 Sugar Land, TX 77478-5389",
+                "City": "Sugar Land",
+                "State": "TX",
+                "Zip": "77478-5389"
+            },
+            "Proximity": {
+                "Distance": "???",
+                "InputZip": "???"
+            }
+        }
+    ]
+}
