@@ -54,21 +54,35 @@ specialty = {"General Practice": 1,
             }
 
 # Loop through input data searchs for the dentists and saves each Dentist AddressId
-for d in input_data['FindDentist_Input']:
+dentists_address_ids = []
+total_searchs = len(input_data['FindDentist_Input'])
+searchs_counter = 1
+for inputs in input_data['FindDentist_Input']:
     # Building URL
-    url = 'https://findadentist.ada.org/api/Dentists?Address={}&Specialty={}&Distance={}'.format(d['zip code'], specialty[d['specialty']], d['distance'])
+    url = 'https://findadentist.ada.org/api/Dentists?Address={}&Specialty={}&Distance={}'.format(inputs['zip code'], 
+                                                                                                 specialty[inputs['specialty']], 
+                                                                                                 inputs['distance'])
     # Make request
-    logger.info("Performing requesting to {}".format(url))
+    logger.info("Performing search {}/{} - requested page: {}".format(searchs_counter, total_searchs, url))
+    searchs_counter += 1
     response = requests.get(url, headers=headers)    
-    
+
     # Wait some time to avoid blocking
-    logger.info("Waiting 10 seconds to avoid blocking ...")
-    sleep(10)
+    wait_time = 15
+    logger.info("Waiting {} seconds to avoid blocking ...".format(wait_time))
+    sleep(wait_time)
+    
     # Check if the response was received
     if response.status_code != 200:
         logger.warn("You got blocked, change your IP address and try again")
+        sys.exit()
     
+    # Saves the Address Ids 
+    data = json.loads(response.text)
+    for dentist in data['Dentists']:
+        dentists_address_ids.append(dentist['AddressId'])
 
+logger.info("{} dentists obtained".format(len(dentists_address_ids)))
 
 
 """
