@@ -14,6 +14,61 @@ import json
 import sys
 from time import sleep
 from logzero import logger
+from random import randint
+
+
+# Function that makes the requests to the findadentist.ada.org API
+def make_request(url):
+
+    # Creating the header to allow requests to the findadentist.ada.org API
+    headers = { "Authorization": "Basic NUNtQitIcVZuOXhTVnFKNkhiZC8xSGZnb29NdU1ZaXk=",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
+                "Referer": "https://findadentist.ada.org/search-results?specialty=1&address=90014&distance=100&searchResultsReferrer=true",
+              }
+
+    # Number of times the script will retry a request after a blocking
+    request_retries_limit = 10 
+    # Retries counter                                
+    request_retries_counter = 0
+
+    # Make request
+    response = requests.get(url, headers=headers)    
+       
+    # Check if the response was received
+    # Status code 200 means that the response was successfully received
+    # Status code 404 means that No results were found or that you get blocked
+    
+    # SEARCH PROFILE requests
+    # If you get blocked the reponse status code is 404 and the text in the
+    # response is '"Not Found"'
+
+    # DENTIST PROFILE requests
+    # The reponse for the Dentist Profile API always got the 200 status code, but
+    # if you get blocked it responses with a JSON with null values .
+    # Get the Person ID of the JSON in the response
+    # If was a request to the Dentist profiles:
+    dentist_profile_id_response = 1
+    if 'DentistProfile' in url:
+        dentist_profile_id_response = json.loads(response.text)['PersonId']
+
+    while (dentist_profile_id_response == 0) or (response.text == '"Not found"'): 
+        # Starts a random wait time and try the request again
+        request_retries_counter += 1
+        # Create a random timer based on the number of retries made
+        random_wait_time = randint(20, 40) * request_retries_counter
+        logger.warn("You got an unexpected response, you may have been blocked!")
+        logger.warn("Waiting a random time: {} seconds ...".format(random_wait_time))
+        sleep(random_wait_time)   
+        logger.info("Performing a new request: {}".format(url))
+        response = requests.get(url, headers=headers)    
+
+        # Check if the number of retries was reached
+        if request_retries_counter >= request_retries_limit:
+            logger.error("Retries limit reached - You may have been blocked, change your IP address and try again")
+            logger.error("Closing the script.")
+            sys.exit()
+
+    return response
 
 
 logger.info('Starting findadentist.py script ...')
@@ -34,12 +89,6 @@ except Exception as exc:
     logger.error(str(exc))
     sys.exit()
 
-# Creating the header to allow requestings to the findadentist.ada.org API
-headers = { "Authorization": "Basic NUNtQitIcVZuOXhTVnFKNkhiZC8xSGZnb29NdU1ZaXk=",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
-            "Referer": "https://findadentist.ada.org/search-results?specialty=1&address=90014&distance=100&searchResultsReferrer=true",
-          }
-
 # Dentist's specialty code mapping
 # All specialty are mapped to a code before request the data
 specialty = {"General Practice": 1,
@@ -55,12 +104,12 @@ specialty = {"General Practice": 1,
             "Oral and Maxillofacial Radiology": 10
             }
 
-
 # Useful Variables
 dentists_address_ids = []                               # Saves the dentists Ids
 total_searchs = len(input_data['FindDentist_Input'])    # Number of searchs to be performed
 searchs_counter = 1                                     
-wait_time = 0.1                                          # Number of seconds to wait between requests
+# Number of seconds to wait between requests
+wait_time = 3                                           
 
 # Loop through input data searchs for the dentists and saves each Dentist AddressId
 for inputs in input_data['FindDentist_Input']:
@@ -69,17 +118,10 @@ for inputs in input_data['FindDentist_Input']:
     url = 'https://findadentist.ada.org/api/Dentists?Address={}&Specialty={}&Distance={}'.format(inputs['zip code'], 
                                                                                                  specialty[inputs['specialty']], 
                                                                                                  inputs['distance'])
-    # Make request
+    # Make the search request
     logger.info("Performing search {}/{} - requested page: {}".format(searchs_counter, total_searchs, url))
     searchs_counter += 1
-    response = requests.get(url, headers=headers)    
-       
-    # Check if the response was received
-    # Status code 200 means that the response was successfully received
-    # Status code 404 means that No results were found or that you get blocked
-    if (response.status_code != 200) and (response.text == '"Not found"'): 
-        logger.warn("Response status code: {} - You may have been blocked, change your IP address and try again".format(response.status_code))
-        sys.exit()
+    response = make_request(url)
     
     # Load the data in a dict object
     data = json.loads(response.text)
@@ -89,46 +131,46 @@ for inputs in input_data['FindDentist_Input']:
         logger.warn("No results found for the parameters: \nAddress={}\nSpecialty={}\nDistance={}".format(inputs['zip code'], 
                                                                                                  specialty[inputs['specialty']], 
                                                                                                  inputs['distance']))
-        # Wait some time to avoid blocking    
-        logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
+        ## Wait some time to avoid blocking    
+        #logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
         sleep(wait_time)   
         continue
     
     logger.info("{} dentists found.".format(len(data["Dentists"])))
 
     # Wait some time to avoid blocking    
-    logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
+    #logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
     sleep(wait_time)
    
     # Saves the Address Ids 
     for dentist in data["Dentists"]:
         dentists_address_ids.append(dentist["AddressId"])
 
-logger.info("{} dentists obtained".format(len(dentists_address_ids)))
+logger.info("{} dentists IDs obtained\n".format(len(dentists_address_ids)))
 
 # Checking if there id any repeated ID
 repeated_ids = len(dentists_address_ids) - len(list(set(dentists_address_ids)))
 if repeated_ids != 0:
     # Removing repetead IDs
     dentists_address_ids = list(set(dentists_address_ids))
-    logger.info("There are {} dentists repeated IDs".format(repeated_ids))
+    logger.warn("There are {} dentists repeated IDs".format(repeated_ids))
+    logger.warn("Removing repeated IDs")
 
 # Get the dentist's data from website API using the AddressIDs
 dentists_counter = 1
 dentists_data = [] # List object that saves the dentist's data
+
+# Scraping data for each dentist ID
+logger.info("Getting data for {} dentists".format(len(dentists_address_ids)))
 for dentist_id in dentists_address_ids:
     # Make request
     logger.info("Getting data for dentist ID {} - {}/{}".format(dentist_id, dentists_counter, len(dentists_address_ids)))
     dentists_counter += 1
-    response = requests.get("https://findadentist.ada.org/api/DentistProfile?AddressId={}".format(dentist_id), headers=headers)
-           
-    # Check if the response was received and if you got blocked
-    if (response.status_code != 200) and (response.text == '"Not found"'): 
-        logger.warn("Response status code: {} - You may have been blocked, change your IP address and try again".format(response.status_code))
-        sys.exit()
-        
+    url = "https://findadentist.ada.org/api/DentistProfile?AddressId={}".format(dentist_id)
+    response = make_request(url)
+    
     # Wait some time to avoid blocking    
-    logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
+    #logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
     sleep(wait_time)
     
     # Saving dentist's data
