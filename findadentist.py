@@ -35,7 +35,8 @@ except Exception as exc:
     sys.exit()
 
 # Creating the header to allow requestings to the findadentist.ada.org API
-headers = { "Authorization": "Basic NUNtQitIcVZuOXhTVnFKNkhiZC8xSGZnb29NdU1ZaXk=",            
+headers = { "Authorization": "Basic NUNtQitIcVZuOXhTVnFKNkhiZC8xSGZnb29NdU1ZaXk=",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
             "Referer": "https://findadentist.ada.org/search-results?specialty=1&address=90014&distance=100&searchResultsReferrer=true",
           }
 
@@ -54,10 +55,14 @@ specialty = {"General Practice": 1,
             "Oral and Maxillofacial Radiology": 10
             }
 
+
+# Useful Variables
+dentists_address_ids = []                               # Saves the dentists Ids
+total_searchs = len(input_data['FindDentist_Input'])    # Number of searchs to be performed
+searchs_counter = 1                                     
+wait_time = 0.1                                          # Number of seconds to wait between requests
+
 # Loop through input data searchs for the dentists and saves each Dentist AddressId
-dentists_address_ids = []
-total_searchs = len(input_data['FindDentist_Input'])
-searchs_counter = 1
 for inputs in input_data['FindDentist_Input']:
     
     # Building URL
@@ -70,19 +75,34 @@ for inputs in input_data['FindDentist_Input']:
     response = requests.get(url, headers=headers)    
        
     # Check if the response was received
-    if response.status_code != 200:
-        logger.warn("You got blocked, change your IP address and try again")
+    # Status code 200 means that the response was successfully received
+    # Status code 404 means that No results were found or that you get blocked
+    if (response.status_code != 200) and (response.text == '"Not found"'): 
+        logger.warn("Response status code: {} - You may have been blocked, change your IP address and try again".format(response.status_code))
         sys.exit()
-
-    # Wait some time to avoid blocking
-    wait_time = 20
-    logger.info("Waiting {} seconds to avoid blocking ...".format(wait_time))
-    sleep(wait_time)
     
-    # Saves the Address Ids 
+    # Load the data in a dict object
     data = json.loads(response.text)
-    for dentist in data['Dentists']:
-        dentists_address_ids.append(dentist['AddressId'])
+    
+    # If no results found, show the message: “No result found”
+    if 'Dentists' not in data.keys():
+        logger.warn("No results found for the parameters: \nAddress={}\nSpecialty={}\nDistance={}".format(inputs['zip code'], 
+                                                                                                 specialty[inputs['specialty']], 
+                                                                                                 inputs['distance']))
+        # Wait some time to avoid blocking    
+        logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
+        sleep(wait_time)   
+        continue
+    
+    logger.info("{} dentists found.".format(len(data["Dentists"])))
+
+    # Wait some time to avoid blocking    
+    logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
+    sleep(wait_time)
+   
+    # Saves the Address Ids 
+    for dentist in data["Dentists"]:
+        dentists_address_ids.append(dentist["AddressId"])
 
 logger.info("{} dentists obtained".format(len(dentists_address_ids)))
 
@@ -102,18 +122,17 @@ for dentist_id in dentists_address_ids:
     dentists_counter += 1
     response = requests.get("https://findadentist.ada.org/api/DentistProfile?AddressId={}".format(dentist_id), headers=headers)
            
-    # Check if the response was received
-    if response.status_code != 200:
-        logger.warn("You got blocked, change your IP address and try again")
+    # Check if the response was received and if you got blocked
+    if (response.status_code != 200) and (response.text == '"Not found"'): 
+        logger.warn("Response status code: {} - You may have been blocked, change your IP address and try again".format(response.status_code))
         sys.exit()
-    
-    # Wait some time to avoid blocking
-    wait_time = 20
-    logger.info("Waiting {} seconds to avoid blocking ...".format(wait_time))
+        
+    # Wait some time to avoid blocking    
+    logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
     sleep(wait_time)
     
     # Saving dentist's data
-    data = json.loads(response.text)
+    data = json.loads(response.text)    
     # Put the data in JSON schema
     formated_data = {
                     "Dentist Name": data["Name"],
