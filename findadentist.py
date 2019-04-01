@@ -16,6 +16,11 @@ from time import sleep
 from logzero import logger
 from random import randint
 
+### Script parameters
+# If set to True all requests will be made using a proxy server
+use_proxy = True
+# Default number of seconds to wait between requests
+wait_time = 3                                           
 
 # Function that makes the requests to the findadentist.ada.org API
 def make_request(url):
@@ -24,54 +29,86 @@ def make_request(url):
     headers = { "Authorization": "Basic NUNtQitIcVZuOXhTVnFKNkhiZC8xSGZnb29NdU1ZaXk=",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
                 "Referer": "https://findadentist.ada.org/search-results?specialty=1&address=90014&distance=100&searchResultsReferrer=true",
-              }
+              }  
 
     # Number of times the script will retry a request after a blocking
     request_retries_limit = 10 
     # Retries counter                                
     request_retries_counter = 0
 
-    # Make request
-    response = requests.get(url, headers=headers)    
-       
-    # Check if the response was received
-    # Status code 200 means that the response was successfully received
-    # Status code 404 means that No results were found or that you get blocked
-    
-    # SEARCH PROFILE requests
-    # If you get blocked the reponse status code is 404 and the text in the
-    # response is '"Not Found"'
+    # Setup a proxy server
+    if use_proxy:
+        proxies = {'http': 'http://proxy.proxycrawl.com:9000',
+                   'https': 'http://proxy.proxycrawl.com:9000'}      
 
-    # DENTIST PROFILE requests
-    # The reponse for the Dentist Profile API always got the 200 status code, but
-    # if you get blocked it responses with a JSON with null values .
-    # Get the Person ID of the JSON in the response
-    # If was a request to the Dentist profiles:
-    dentist_profile_id_response = 1
-    if 'DentistProfile' in url:
-        dentist_profile_id_response = json.loads(response.text)['PersonId']
+        # Keep trying requests until the requests retries limit is reached
+        while (True): 
+            
+            try:
+                # Make request with proxy
+                response = requests.get(url, headers=headers, proxies=proxies)                                  
+                # If got the reponse stops the loop
+                break
 
-    while (dentist_profile_id_response == 0) or (response.text == '"Not found"'): 
-        # Starts a random wait time and try the request again
-        request_retries_counter += 1
-        # Create a random timer based on the number of retries made
-        random_wait_time = randint(20, 40) * request_retries_counter
-        logger.warn("You got an unexpected response, you may have been blocked!")
-        logger.warn("Waiting a random time: {} seconds ...".format(random_wait_time))
-        sleep(random_wait_time)   
-        logger.info("Performing a new request: {}".format(url))
-        response = requests.get(url, headers=headers)    
+            # If got a error
+            except:
+                # Starts a random wait time and try the request again
+                request_retries_counter += 1
+                # Create a random timer based on the number of retries made 
+                proxy_wait_time = wait_time * request_retries_counter
+                logger.warn("Proxy connection error ... trying again in {} seconds ...".format(proxy_wait_time))                
+                sleep(proxy_wait_time)   
+                logger.warn("Trying a new request: {}".format(url))
+            
+            # Check if the number of retries was reached
+            if request_retries_counter >= request_retries_limit:
+                logger.error("Retries limit reached - Can't connect to the proxy server: {}".format(proxies['http']))
+                logger.error("Closing the script.")
+                sys.exit()
+                 
+    else:            
+        # Make request with no Proxy
+        response = requests.get(url, headers=headers, proxies=proxies)    
+        
+        # Check if the response was received
+        # Status code 200 means that the response was successfully received
+        # Status code 404 means that No results were found or that you get blocked
+        
+        # SEARCH PROFILE requests
+        # If you get blocked the reponse status code is 404 and the text in the
+        # response is '"Not Found"'
 
-        # Check if the number of retries was reached
-        if request_retries_counter >= request_retries_limit:
-            logger.error("Retries limit reached - You may have been blocked, change your IP address and try again")
-            logger.error("Closing the script.")
-            sys.exit()
+        # DENTIST PROFILE requests
+        # The reponse for the Dentist Profile API always got the 200 status code, but
+        # if you get blocked it responses with a JSON with null values .
+        # Get the Person ID of the JSON in the response
+        # If was a request to the Dentist profiles:
+        dentist_profile_id_response = 1
+        if 'DentistProfile' in url:
+            dentist_profile_id_response = json.loads(response.text)['PersonId']
+
+        while (dentist_profile_id_response == 0) or (response.text == '"Not found"'): 
+            # Starts a random wait time and try the request again
+            request_retries_counter += 1
+            # Create a random timer based on the number of retries made
+            random_wait_time = randint(20, 40) * request_retries_counter
+            logger.warn("You got an unexpected response, you may have been blocked!")
+            logger.warn("Waiting a random time: {} seconds ...".format(random_wait_time))
+            sleep(random_wait_time)   
+            logger.warn("Trying a new request: {}".format(url))
+            response = requests.get(url, headers=headers, proxies=proxies)    
+
+            # Check if the number of retries was reached
+            if request_retries_counter >= request_retries_limit:
+                logger.error("Retries limit reached - You may have been blocked, change your IP address and try again")
+                logger.error("Closing the script.")
+                sys.exit()
 
     return response
 
 
 logger.info('Starting findadentist.py script ...')
+if use_proxy: logger.debug("Using proxy server: proxy.proxycrawl.com:9000")
 
 # Check if the input file was in the command parameters
 if (len(sys.argv) < 2):
@@ -108,8 +145,6 @@ specialty = {"General Practice": 1,
 dentists_address_ids = []                               # Saves the dentists Ids
 total_searchs = len(input_data['FindDentist_Input'])    # Number of searchs to be performed
 searchs_counter = 1                                     
-# Number of seconds to wait between requests
-wait_time = 3                                           
 
 # Loop through input data searchs for the dentists and saves each Dentist AddressId
 for inputs in input_data['FindDentist_Input']:
@@ -128,7 +163,7 @@ for inputs in input_data['FindDentist_Input']:
     
     # If no results found, show the message: “No result found”
     if 'Dentists' not in data.keys():
-        logger.warn("No results found for the parameters: \nAddress={}\nSpecialty={}\nDistance={}".format(inputs['zip code'], 
+        logger.warn("No results found for the parameters: Address={}  Specialty={}  Distance={}".format(inputs['zip code'], 
                                                                                                  specialty[inputs['specialty']], 
                                                                                                  inputs['distance']))
         ## Wait some time to avoid blocking    
@@ -207,9 +242,10 @@ for dentist_id in dentists_address_ids:
 # Saving the data in a JSON file
 output_data = {"FindDentist_Output": dentists_data}
 output_filename = 'output.json'
-logger.info("Saving the data in {} file".format(output_filename))
+logger.debug("Saving the data in {} file".format(output_filename))
 with open(output_filename, 'w', encoding='utf-8') as outfile:
     json.dump(output_data, outfile, indent=4)
+logger.debug("scraping finished")
 
 
 
@@ -239,6 +275,7 @@ Deliver a docker container that we can run your code
 PENDENCIAS
 - Checar schema
 - Checar Ingles dos comentários
+- Contabilizar o tempo total
 - Criar o container
 
 """
