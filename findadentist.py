@@ -17,11 +17,13 @@ from logzero import logger
 from random import randint
 from bs4 import BeautifulSoup
 from itertools import cycle
+from datetime import datetime
 
 
 # If set to True all requests will be made using a proxy server
 use_proxy = True
 proxy_pool = None
+proxy_server_url = 'https://www.sslproxies.org/'
 # Default number of seconds to wait between requests when not using proxies
 wait_time = 3                                           
 
@@ -61,8 +63,8 @@ def make_request(url, proxy_pool):
     # Using proxy        
     if use_proxy:         
         while (True):
-            # Get proxy IP address and Port
-            proxy = next(proxy_pool)            
+            # Get proxy IP address and Port            
+            proxy = next(proxy_pool)                  
             try:
                 # Make request with proxy
                 logger.debug("Using proxy: {}".format(proxy))                
@@ -81,20 +83,23 @@ def make_request(url, proxy_pool):
             # If got a error
             except:
                 # Starts a random wait time and try the request again
-                request_retries_counter += 1                
-                logger.warn("Proxy connection error, changing proxy ...")                                
-                logger.warn("Trying a new request to {}".format(url))
+                request_retries_counter += 1 
+                # Wait 2 seconds and try again
+                sleep(2)               
+                logger.warn("Proxy connection error, changing proxy ...")                                                
             
             # Check if the number of retries was reached
             if request_retries_counter >= request_retries_limit:
                 logger.error("Retries limit reached - Can't connect to the proxy servers")
                 logger.error("Closing the script.")
                 sys.exit()
-                 
+         
     # If no proxy was set
     else:            
         # Make request with no Proxy
         response = requests.get(url, headers=headers)    
+        # Wait time between requests
+        sleep(wait_time)
                 
         # SEARCH PROFILE requests
         # If you get blocked the reponse status code is 404 and the text in the
@@ -128,10 +133,10 @@ def make_request(url, proxy_pool):
 
     return response
 
-
+# Starting scraping
+start_time = datetime.today()
 logger.info('Starting findadentist.py script ...')
-if use_proxy: 
-    proxy_server_url = 'https://www.sslproxies.org/'
+if use_proxy:     
     proxy_pool = get_proxies_pool(proxy_server_url)
     logger.debug("Using proxy servers from {}".format(proxy_server_url))
 
@@ -167,7 +172,7 @@ specialty = {"General Practice": 1,
             }
 
 # Useful Variables
-dentists_address_ids = []                               # Saves the dentists Ids
+search_results = {}                                     # Saves the dentists Ids, Distances and InputZip codes.
 total_searchs = len(input_data['FindDentist_Input'])    # Number of searchs to be performed
 searchs_counter = 1                                     
 
@@ -188,51 +193,34 @@ for inputs in input_data['FindDentist_Input']:
     
     # If no results found, show the message: “No result found”
     if 'Dentists' not in data.keys():
-        logger.warn("No results found for the parameters: Address={}  Specialty={}  Distance={}".format(inputs['zip code'], 
+        logger.warn("No results found for the search parameters: Address={}  Specialty={}  Distance={}".format(inputs['zip code'], 
                                                                                                  specialty[inputs['specialty']], 
                                                                                                  inputs['distance']))
-        ## Wait some time to avoid blocking    
-        #logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
-        sleep(wait_time)   
         continue
     
     logger.info("{} dentists found.".format(len(data["Dentists"])))
 
-    # Wait some time to avoid blocking    
-    #logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
-    sleep(wait_time)
-   
-    # Saves the Address Ids 
+    # Saves the Address Ids as dict keys and Distances and InputZip codes a list.
     for dentist in data["Dentists"]:
-        dentists_address_ids.append(dentist["AddressId"])
+        if dentist["AddressId"] not in search_results.keys():
+            search_results[dentist["AddressId"]] = [dentist["Distance"], inputs['zip code']] 
+        
+logger.info("{} dentists IDs obtained".format(len(search_results)))
 
-logger.info("{} dentists IDs obtained".format(len(dentists_address_ids)))
-
-# Checking if there id any repeated ID
-repeated_ids = len(dentists_address_ids) - len(list(set(dentists_address_ids)))
-if repeated_ids != 0:
-    # Removing repetead IDs
-    dentists_address_ids = list(set(dentists_address_ids))
-    logger.warn("There are {} dentists repeated IDs".format(repeated_ids))
-    logger.warn("Removing repeated IDs")
-
+# Scraping dentists data
 # Get the dentist's data from website API using the AddressIDs
 dentists_counter = 1
 dentists_data = [] # List object that saves the dentist's data
 
 # Scraping data for each dentist ID
-logger.info("Getting data for {} dentists".format(len(dentists_address_ids)))
-for dentist_id in dentists_address_ids:
+logger.info("Getting data for {} dentists".format(len(search_results)))
+for dentist_id in search_results.keys():
     # Make request
-    logger.info("Getting data for dentist ID {} - {}/{}".format(dentist_id, dentists_counter, len(dentists_address_ids)))
+    logger.info("Getting data for dentist ID {} - {}/{}".format(dentist_id, dentists_counter, len(search_results)))
     dentists_counter += 1
     url = "https://findadentist.ada.org/api/DentistProfile?AddressId={}".format(dentist_id)
     response = make_request(url, proxy_pool)
-    
-    # Wait some time to avoid blocking    
-    #logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
-    sleep(wait_time)
-    
+        
     # Saving dentist's data
     data = json.loads(response.text)    
     # Put the data in JSON schema
@@ -256,13 +244,14 @@ for dentist_id in dentists_address_ids:
                     },
                     "Proximity": 
                     {
-                    "Distance": "???",
-                    "InputZip": "???"
+                    "Distance": str(search_results[dentist_id][0]),
+                    "InputZip": str(search_results[dentist_id][1])
                     }
                 }
 
     # Saving the data in the list
     dentists_data.append(formated_data)
+    print(formated_data)
 
 # Saving the data in a JSON file
 output_data = {"FindDentist_Output": dentists_data}
@@ -270,8 +259,11 @@ output_filename = 'output.json'
 logger.debug("Saving the data in {} file".format(output_filename))
 with open(output_filename, 'w', encoding='utf-8') as outfile:
     json.dump(output_data, outfile, indent=4)
-logger.debug("scraping finished")
 
+# Compute scraping time
+time_elapsed = (datetime.today() - start_time).total_seconds()
+logger.info("Total scraping time: {} minutes".format(round(time_elapsed/60,2)))
+logger.debug("scraping finished")
 
 
 """
