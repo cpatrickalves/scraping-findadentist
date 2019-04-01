@@ -15,15 +15,37 @@ import sys
 from time import sleep
 from logzero import logger
 from random import randint
+from bs4 import BeautifulSoup
+from itertools import cycle
 
-### Script parameters
+
 # If set to True all requests will be made using a proxy server
-use_proxy = False
-# Default number of seconds to wait between requests
+use_proxy = True
+proxy_pool = None
+# Default number of seconds to wait between requests when not using proxies
 wait_time = 3                                           
 
+# Function that gets a list of HTTPS proxies from https://www.sslproxies.org/
+def get_proxies_pool(proxy_server_url):    
+    response = requests.get(proxy_server_url)
+    if response.status_code != 200:
+        logger.error('Failed to get Proxies list in {}'.format(proxy_server_url))
+
+    soup = BeautifulSoup(response.text,"lxml")
+    # Filter to get only HTTPS proxies
+    https_proxies = filter(lambda item: "yes" in item.text,
+                           soup.select("table.table tr"))
+    # Create a proxies list
+    proxy_pool = []
+    for item in https_proxies:
+        proxy_pool.append("{}:{}".format(item.select_one("td").text,
+                             item.select_one("td:nth-of-type(2)").text))
+    
+    return cycle(proxy_pool)
+
+
 # Function that makes the requests to the findadentist.ada.org API
-def make_request(url):
+def make_request(url, proxy_pool):
 
     # Creating the header to allow requests to the findadentist.ada.org API
     headers = { "Authorization": "Basic NUNtQitIcVZuOXhTVnFKNkhiZC8xSGZnb29NdU1ZaXk=",
@@ -34,44 +56,46 @@ def make_request(url):
     # Number of times the script will retry a request after a blocking
     request_retries_limit = 10 
     # Retries counter                                
-    request_retries_counter = 0
-    # Setup a proxy server
-    proxies = {'http': 'http://proxy.proxycrawl.com:9000',
-               'https': 'http://proxy.proxycrawl.com:9000'}  
-        
-    if use_proxy:        
-        # Keep trying requests until the requests retries limit is reached
-        while (True):             
+    request_retries_counter = 0    
+
+    # Using proxy        
+    if use_proxy:         
+        while (True):
+            # Get proxy IP address and Port
+            proxy = next(proxy_pool)            
             try:
                 # Make request with proxy
-                response = requests.get(url, headers=headers, proxies=proxies)                                  
-                # If got the reponse stops the loop
-                break
+                logger.debug("Using proxy: {}".format(proxy))                
+                response = requests.get(url, headers=headers, proxies={"http": proxy, "https": proxy}, timeout=5)                                  
+                
+                # Check if the Proxy IP adress got blocked 
+                dentist_profile_id_response = None
+                if 'DentistProfile' in url:
+                    dentist_profile_id_response = json.loads(response.text)['PersonId']
+                if (dentist_profile_id_response == 0) or (response.text == '"Not found"'): 
+                    logger.warn("Proxy server {} was blocked, trying a new one ...".format(proxy))                
+                    continue
+                else:
+                    break
 
             # If got a error
             except:
                 # Starts a random wait time and try the request again
-                request_retries_counter += 1
-                # Create a random timer based on the number of retries made 
-                proxy_wait_time = wait_time * request_retries_counter
-                logger.warn("Proxy connection error ... trying again in {} seconds ...".format(proxy_wait_time))                
-                sleep(proxy_wait_time)   
-                logger.warn("Trying a new request: {}".format(url))
+                request_retries_counter += 1                
+                logger.warn("Proxy connection error, changing proxy ...")                                
+                logger.warn("Trying a new request to {}".format(url))
             
             # Check if the number of retries was reached
             if request_retries_counter >= request_retries_limit:
-                logger.error("Retries limit reached - Can't connect to the proxy server: {}".format(proxies['http']))
+                logger.error("Retries limit reached - Can't connect to the proxy servers")
                 logger.error("Closing the script.")
                 sys.exit()
                  
+    # If no proxy was set
     else:            
         # Make request with no Proxy
         response = requests.get(url, headers=headers)    
-        
-        # Check if the response was received
-        # Status code 200 means that the response was successfully received
-        # Status code 404 means that No results were found or that you get blocked
-        
+                
         # SEARCH PROFILE requests
         # If you get blocked the reponse status code is 404 and the text in the
         # response is '"Not Found"'
@@ -81,7 +105,7 @@ def make_request(url):
         # if you get blocked it responses with a JSON with null values .
         # Get the Person ID of the JSON in the response
         # If was a request to the Dentist profiles:
-        dentist_profile_id_response = 1
+        dentist_profile_id_response = None
         if 'DentistProfile' in url:
             dentist_profile_id_response = json.loads(response.text)['PersonId']
 
@@ -106,7 +130,10 @@ def make_request(url):
 
 
 logger.info('Starting findadentist.py script ...')
-if use_proxy: logger.debug("Using proxy server: proxy.proxycrawl.com:9000")
+if use_proxy: 
+    proxy_server_url = 'https://www.sslproxies.org/'
+    proxy_pool = get_proxies_pool(proxy_server_url)
+    logger.debug("Using proxy servers from {}".format(proxy_server_url))
 
 # Check if the input file was in the command parameters
 if (len(sys.argv) < 2):
@@ -154,7 +181,7 @@ for inputs in input_data['FindDentist_Input']:
     # Make the search request
     logger.info("Performing search {}/{} - requested page: {}".format(searchs_counter, total_searchs, url))
     searchs_counter += 1
-    response = make_request(url)
+    response = make_request(url, proxy_pool)
     
     # Load the data in a dict object
     data = json.loads(response.text)
@@ -200,7 +227,7 @@ for dentist_id in dentists_address_ids:
     logger.info("Getting data for dentist ID {} - {}/{}".format(dentist_id, dentists_counter, len(dentists_address_ids)))
     dentists_counter += 1
     url = "https://findadentist.ada.org/api/DentistProfile?AddressId={}".format(dentist_id)
-    response = make_request(url)
+    response = make_request(url, proxy_pool)
     
     # Wait some time to avoid blocking    
     #logger.debug("Waiting {} seconds to avoid blocking ...\n".format(wait_time))
