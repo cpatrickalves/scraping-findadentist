@@ -18,7 +18,7 @@ from random import randint
 
 ### Script parameters
 # If set to True all requests will be made using a proxy server
-use_proxy = True
+use_proxy = False
 # Default number of seconds to wait between requests
 wait_time = 3                                           
 
@@ -35,15 +35,13 @@ def make_request(url):
     request_retries_limit = 10 
     # Retries counter                                
     request_retries_counter = 0
-
     # Setup a proxy server
-    if use_proxy:
-        proxies = {'http': 'http://proxy.proxycrawl.com:9000',
-                   'https': 'http://proxy.proxycrawl.com:9000'}      
-
+    proxies = {'http': 'http://proxy.proxycrawl.com:9000',
+               'https': 'http://proxy.proxycrawl.com:9000'}  
+        
+    if use_proxy:        
         # Keep trying requests until the requests retries limit is reached
-        while (True): 
-            
+        while (True):             
             try:
                 # Make request with proxy
                 response = requests.get(url, headers=headers, proxies=proxies)                                  
@@ -68,7 +66,7 @@ def make_request(url):
                  
     else:            
         # Make request with no Proxy
-        response = requests.get(url, headers=headers, proxies=proxies)    
+        response = requests.get(url, headers=headers)    
         
         # Check if the response was received
         # Status code 200 means that the response was successfully received
@@ -91,12 +89,12 @@ def make_request(url):
             # Starts a random wait time and try the request again
             request_retries_counter += 1
             # Create a random timer based on the number of retries made
-            random_wait_time = randint(20, 40) * request_retries_counter
+            random_wait_time = randint(15, 30) * request_retries_counter
             logger.warn("You got an unexpected response, you may have been blocked!")
             logger.warn("Waiting a random time: {} seconds ...".format(random_wait_time))
             sleep(random_wait_time)   
             logger.warn("Trying a new request: {}".format(url))
-            response = requests.get(url, headers=headers, proxies=proxies)    
+            response = requests.get(url, headers=headers)    
 
             # Check if the number of retries was reached
             if request_retries_counter >= request_retries_limit:
@@ -181,7 +179,7 @@ for inputs in input_data['FindDentist_Input']:
     for dentist in data["Dentists"]:
         dentists_address_ids.append(dentist["AddressId"])
 
-logger.info("{} dentists IDs obtained\n".format(len(dentists_address_ids)))
+logger.info("{} dentists IDs obtained".format(len(dentists_address_ids)))
 
 # Checking if there id any repeated ID
 repeated_ids = len(dentists_address_ids) - len(list(set(dentists_address_ids)))
@@ -277,5 +275,11 @@ PENDENCIAS
 - Checar Ingles dos comentários
 - Contabilizar o tempo total
 - Criar o container
+
+if __name__ == '__main__':
+    url = 'https://www.yellowpages.com/search?search_terms=Coffee%20Shops&geo_location_terms=Los%20Angeles%2C%20CA&page={}'
+    links = [url.format(page) for page in range(1, 6)]
+    for link in links:
+        parse_content(link)
 
 """
