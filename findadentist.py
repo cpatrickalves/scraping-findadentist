@@ -43,7 +43,7 @@ def make_request(url, proxy_pool):
             proxy = next(proxy_pool)               
             try:
                 # Make request with proxy
-                logger.debug("Using proxy: {}".format(proxy))                
+                if proxy_server_options != 1: logger.debug("Using proxy: {}".format(proxy))                
                 response = requests.get(url, headers=headers, proxies={"http": proxy, "https": proxy}, timeout=5)                                  
                 
                 # Check if the Proxy IP adress got blocked 
@@ -123,7 +123,7 @@ if (len(sys.argv) < 2):
 # 0 - Do not use Proxy
 # 1 - Uses proxy.proxycrawl.com service (recommended)
 # 2 - Uses www.sslproxies.org service
-proxy_server_options = 2
+proxy_server_options = 1
 proxy_pool = None
 
 # Starting scraping
@@ -191,7 +191,7 @@ for inputs in input_data['FindDentist_Input']:
         if dentist["AddressId"] not in search_results.keys():
             search_results[dentist["AddressId"]] = [dentist["Distance"], inputs['zip code']] 
         
-logger.info("{} dentists IDs obtained".format(len(search_results)))
+logger.info("A total of {} dentists IDs obtained".format(len(search_results)))
 
 # Scraping dentists data
 # Get the dentist's data from website API using the AddressIDs
