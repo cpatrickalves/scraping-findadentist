@@ -15,39 +15,15 @@ import sys
 from time import sleep
 from logzero import logger
 from random import randint
-from bs4 import BeautifulSoup
-from itertools import cycle
 from datetime import datetime
-
-
-# If set to True all requests will be made using a proxy server
-use_proxy = True
-proxy_pool = None
-proxy_server_url = 'https://www.sslproxies.org/'
-# Default number of seconds to wait between requests when not using proxies
-wait_time = 3                                           
-
-# Function that gets a list of HTTPS proxies from https://www.sslproxies.org/
-def get_proxies_pool(proxy_server_url):    
-    response = requests.get(proxy_server_url)
-    if response.status_code != 200:
-        logger.error('Failed to get Proxies list in {}'.format(proxy_server_url))
-
-    soup = BeautifulSoup(response.text,"lxml")
-    # Filter to get only HTTPS proxies
-    https_proxies = filter(lambda item: "yes" in item.text,
-                           soup.select("table.table tr"))
-    # Create a proxies list
-    proxy_pool = []
-    for item in https_proxies:
-        proxy_pool.append("{}:{}".format(item.select_one("td").text,
-                             item.select_one("td:nth-of-type(2)").text))
-    
-    return cycle(proxy_pool)
+from proxy_pool import get_proxies_pool
 
 
 # Function that makes the requests to the findadentist.ada.org API
 def make_request(url, proxy_pool):
+
+    # Default number of seconds to wait between 
+    wait_time = 2                                        
 
     # Creating the header to allow requests to the findadentist.ada.org API
     headers = { "Authorization": "Basic NUNtQitIcVZuOXhTVnFKNkhiZC8xSGZnb29NdU1ZaXk=",
@@ -61,10 +37,10 @@ def make_request(url, proxy_pool):
     request_retries_counter = 0    
 
     # Using proxy        
-    if use_proxy:         
+    if proxy_pool != None:         
         while (True):
             # Get proxy IP address and Port            
-            proxy = next(proxy_pool)                  
+            proxy = next(proxy_pool)               
             try:
                 # Make request with proxy
                 logger.debug("Using proxy: {}".format(proxy))                
@@ -79,13 +55,16 @@ def make_request(url, proxy_pool):
                     continue
                 else:
                     break
+                
+                # Wait some time to the next request
+                sleep(wait_time/2)               
 
             # If got a error
             except:
                 # Starts a random wait time and try the request again
                 request_retries_counter += 1 
-                # Wait 2 seconds and try again
-                sleep(2)               
+                # Wait some time and try again
+                sleep(wait_time)               
                 logger.warn("Proxy connection error, changing proxy ...")                                                
             
             # Check if the number of retries was reached
@@ -98,7 +77,7 @@ def make_request(url, proxy_pool):
     else:            
         # Make request with no Proxy
         response = requests.get(url, headers=headers)    
-        # Wait time between requests
+        # Wait 1 seconds between requests
         sleep(wait_time)
                 
         # SEARCH PROFILE requests
@@ -133,12 +112,19 @@ def make_request(url, proxy_pool):
 
     return response
 
+
+# Set the Proxy option to be used:
+# 0 - Do not use Proxy
+# 1 - Uses proxy.proxycrawl.com service (recommended)
+# 2 - Uses www.sslproxies.org service
+proxy_server_options = 1
+proxy_pool = None
+
 # Starting scraping
 start_time = datetime.today()
 logger.info('Starting findadentist.py script ...')
-if use_proxy:     
-    proxy_pool = get_proxies_pool(proxy_server_url)
-    logger.debug("Using proxy servers from {}".format(proxy_server_url))
+if proxy_server_options != 0:     
+    proxy_pool = get_proxies_pool(proxy_server_options)    
 
 # Check if the input file was in the command parameters
 if (len(sys.argv) < 2):
@@ -251,7 +237,7 @@ for dentist_id in search_results.keys():
 
     # Saving the data in the list
     dentists_data.append(formated_data)
-    print(formated_data)
+    
 
 # Saving the data in a JSON file
 output_data = {"FindDentist_Output": dentists_data}
