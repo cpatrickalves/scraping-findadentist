@@ -3,7 +3,7 @@
 #title           :findadentist.py
 #description     :Extract Dentist's profiles from the findadentist.ada.org website.
 #author          :Patrick Alves (cpatrickalves@gmail.com)
-#date            :29-03-2019
+#creation date   :29-03-2019
 #usage           :python findadentist.py inputfile.json
 #output          :Another JSON file (output.json) with dentist's data
 #python_version  :3.6
@@ -31,7 +31,7 @@ def make_request(url, proxy_pool):
                 "Referer": "https://findadentist.ada.org/search-results?specialty=1&address=90014&distance=100&searchResultsReferrer=true",
               }  
 
-    # Number of times the script will retry a request after a blocking
+    # Number of times the script will retry a request after a error/blocking
     request_retries_limit = 10 
     # Retries counter                                
     request_retries_counter = 0    
@@ -113,11 +113,17 @@ def make_request(url, proxy_pool):
     return response
 
 
+# Check if the input file was in the command parameters
+if (len(sys.argv) < 2):
+    logger.error("Missing input file! You need to pass the JSON input file as a script's parameter.")
+    logger.error('<usage>: python findadentist.py inputfile.json')
+    sys.exit()
+
 # Set the Proxy option to be used:
 # 0 - Do not use Proxy
 # 1 - Uses proxy.proxycrawl.com service (recommended)
 # 2 - Uses www.sslproxies.org service
-proxy_server_options = 1
+proxy_server_options = 2
 proxy_pool = None
 
 # Starting scraping
@@ -125,12 +131,6 @@ start_time = datetime.today()
 logger.info('Starting findadentist.py script ...')
 if proxy_server_options != 0:     
     proxy_pool = get_proxies_pool(proxy_server_options)    
-
-# Check if the input file was in the command parameters
-if (len(sys.argv) < 2):
-    logger.error("Missing input file! You need to pass the JSON input file as a script's parameter.")
-    logger.error('<usage>: python findadentist.py inputfile.json')
-    sys.exit()
 
 # Load JSON file with input data
 logger.info("Loading input file: {}".format(sys.argv[1]))
@@ -238,7 +238,6 @@ for dentist_id in search_results.keys():
     # Saving the data in the list
     dentists_data.append(formated_data)
     
-
 # Saving the data in a JSON file
 output_data = {"FindDentist_Output": dentists_data}
 output_filename = 'output.json'
@@ -250,41 +249,3 @@ with open(output_filename, 'w', encoding='utf-8') as outfile:
 time_elapsed = (datetime.today() - start_time).total_seconds()
 logger.info("Total scraping time: {} minutes".format(round(time_elapsed/60,2)))
 logger.debug("scraping finished")
-
-
-"""
-Here is the website: https://findadentist.ada.org/
-
-The requirements are:
-
-Use the parameters from a JSON input file (provided)
-
-zip code
-distance
-specialty
-
-Use the parameters from the input JSON file to search for a list of dentists
-Collect all the dentist name & contact info
-If no results found, set the error status flag to “No result found”
-Output a JSON file with all the dentist information and any error status
-
-Output JSON must be validated against a pre-defined JSON schema
-
-Deliverables
-
-Share your code for review via your own GIT or Bitbucket account
-Deliver a docker container that we can run your code
-
-PENDENCIAS
-- Checar schema
-- Checar Ingles dos comentários
-- Contabilizar o tempo total
-- Criar o container
-
-if __name__ == '__main__':
-    url = 'https://www.yellowpages.com/search?search_terms=Coffee%20Shops&geo_location_terms=Los%20Angeles%2C%20CA&page={}'
-    links = [url.format(page) for page in range(1, 6)]
-    for link in links:
-        parse_content(link)
-
-"""
