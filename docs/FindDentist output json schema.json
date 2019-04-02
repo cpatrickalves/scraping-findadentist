@@ -1,6 +1,6 @@
 {
   "definitions": {},
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-06/schema#",
   "$id": "http://example.com/root.json",
   "type": "object",
   "title": "The Root Schema",
@@ -9,36 +9,32 @@
   ],
   "properties": {
     "FindDentist_Output": {
-      "$id": "#/properties/FindDentist_Output",
       "type": "array",
       "title": "The Finddentist_output Schema",
       "items": {
-        "$id": "#/properties/FindDentist_Output/items",
         "type": "object",
         "title": "The Items Schema",
         "required": [
-          "Dentist Name",
-          "Specialty",
-          "ProfieImage_URL",
+          "dentistName",
+          "specialty",
           "language",
-          "Education",
-          "Gender",
-          "Contact Info",
-          "Proximity"
+          "education",
+          "gender",
+          "paymentOptions",
+          "contactInfo",
+          "proximity"
         ],
         "properties": {
-          "Dentist Name": {
-            "$id": "#/properties/FindDentist_Output/items/properties/Dentist Name",
+          "dentistName": {
             "type": "string",
-            "title": "The Dentist name Schema",
+            "title": "The Dentistname Schema",
             "default": "",
             "examples": [
               "Dr. Lela Dekanosidze"
             ],
             "pattern": "^(.*)$"
           },
-          "Specialty": {
-            "$id": "#/properties/FindDentist_Output/items/properties/Specialty",
+          "specialty": {
             "type": "string",
             "title": "The Specialty Schema",
             "default": "",
@@ -47,8 +43,7 @@
             ],
             "pattern": "^(.*)$"
           },
-          "ProfieImage_URL": {
-            "$id": "#/properties/FindDentist_Output/items/properties/ProfieImage_URL",
+          "profieImage_URL": {
             "type": "string",
             "title": "The Profieimage_url Schema",
             "default": "",
@@ -58,7 +53,6 @@
             "pattern": "^(.*)$"
           },
           "website": {
-            "$id": "#/properties/FindDentist_Output/items/properties/website",
             "type": "string",
             "title": "The Website Schema",
             "default": "",
@@ -68,11 +62,9 @@
             "pattern": "^(.*)$"
           },
           "language": {
-            "$id": "#/properties/FindDentist_Output/items/properties/language",
             "type": "array",
             "title": "The Language Schema",
             "items": {
-              "$id": "#/properties/FindDentist_Output/items/properties/language/items",
               "type": "string",
               "title": "The Items Schema",
               "default": "",
@@ -83,8 +75,7 @@
               "pattern": "^(.*)$"
             }
           },
-          "Education": {
-            "$id": "#/properties/FindDentist_Output/items/properties/Education",
+          "education": {
             "type": "string",
             "title": "The Education Schema",
             "default": "",
@@ -93,8 +84,7 @@
             ],
             "pattern": "^(.*)$"
           },
-          "Gender": {
-            "$id": "#/properties/FindDentist_Output/items/properties/Gender",
+          "gender": {
             "type": "string",
             "title": "The Gender Schema",
             "default": "",
@@ -103,13 +93,10 @@
             ],
             "pattern": "^(.*)$"
           },
-          "Payment Options": {
-            "$id": "#/properties/FindDentist_Output/items/properties/Payment Options",
+          "paymentOptions": {
             "type": "array",
-            "title": "The Payment options Schema",
-            "default": null,
+            "title": "The Paymentoptions Schema",
             "items": {
-              "$id": "#/properties/FindDentist_Output/items/properties/Payment Options/items",
               "type": "string",
               "title": "The Items Schema",
               "default": "",
@@ -123,20 +110,18 @@
               "pattern": "^(.*)$"
             }
           },
-          "Contact Info": {
-            "$id": "#/properties/FindDentist_Output/items/properties/Contact Info",
+          "contactInfo": {
             "type": "object",
-            "title": "The Contact info Schema",
+            "title": "The Contactinfo Schema",
             "required": [
-              "Phone",
-              "Address",
-              "City",
-              "State",
-              "Zip"
+              "phone",
+              "address",
+              "city",
+              "state",
+              "zip"
             ],
             "properties": {
-              "Phone": {
-                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/Phone",
+              "phone": {
                 "type": "string",
                 "title": "The Phone Schema",
                 "default": "",
@@ -145,8 +130,7 @@
                 ],
                 "pattern": "^(.*)$"
               },
-              "Address": {
-                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/Address",
+              "address": {
                 "type": "string",
                 "title": "The Address Schema",
                 "default": "",
@@ -155,8 +139,7 @@
                 ],
                 "pattern": "^(.*)$"
               },
-              "City": {
-                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/City",
+              "city": {
                 "type": "string",
                 "title": "The City Schema",
                 "default": "",
@@ -165,8 +148,7 @@
                 ],
                 "pattern": "^(.*)$"
               },
-              "State": {
-                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/State",
+              "state": {
                 "type": "string",
                 "title": "The State Schema",
                 "default": "",
@@ -175,8 +157,7 @@
                 ],
                 "pattern": "^(.*)$"
               },
-              "Zip": {
-                "$id": "#/properties/FindDentist_Output/items/properties/Contact Info/properties/Zip",
+              "zip": {
                 "type": "string",
                 "title": "The Zip Schema",
                 "default": "",
@@ -187,15 +168,15 @@
               }
             }
           },
-          "Proximity": {
-            "$id": "#/properties/FindDentist_Output/items/properties/Proximity",
+          "proximity": {
             "type": "object",
             "title": "The Proximity Schema",
-            "default": null,
             "properties": {
-              "Distance": {
-                "$id": "#/properties/FindDentist_Output/items/properties/Proximity/properties/Distance",
-                "type": "string",
+              "distance": {
+                "type": [
+                  "string",
+                  "number"
+                ],
                 "title": "The Distance Schema",
                 "default": "",
                 "examples": [
@@ -203,8 +184,7 @@
                 ],
                 "pattern": "^(.*)$"
               },
-              "InputZip": {
-                "$id": "#/properties/FindDentist_Output/items/properties/Proximity/properties/InputZip",
+              "inputZip": {
                 "type": "string",
                 "title": "The Inputzip Schema",
                 "default": "",
@@ -215,7 +195,7 @@
               }
             },
             "required": [
-              "InputZip"
+              "inputZip"
             ]
           }
         }

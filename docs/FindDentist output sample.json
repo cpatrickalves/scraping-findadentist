@@ -2,27 +2,27 @@
 "FindDentist_Output":
 [
   {
-    "Dentist Name": "Dr. Lela Dekanosidze",
-    "Specialty": "General Practice",
-    "ProfieImage_URL": "https://findadentist.ada.org/ca/los-angeles/beverly-hills/general-practice/dr-lela-dekanosidze-1474840",
+    "dentistName": "Dr. Lela Dekanosidze",
+    "specialty": "General Practice",
+    "profieImage_URL": "https://findadentist.ada.org/ca/los-angeles/beverly-hills/general-practice/dr-lela-dekanosidze-1474840",
     "website":"http://www.drmaddahi.com/",
     "language": ["English", "Spanish"],
-    "Education": "University of Southern California",
-    "Gender": "Male",
-    "Payment Options": ["Out-of-network", "files claim", "CareCredit", "Financing", "Cash/Check"],
+    "education": "University of Southern California",
+    "gender": "Male",
+    "paymentOptions": ["Out-of-network", "files claim", "CareCredit", "Financing", "Cash/Check"],
     
-    "Contact Info": 
+    "contactInfo": 
     {
-    "Phone": "(310) 275-1137",
-    "Address": "435 N Bedford Dr Ste 306 Beverly Hills, CA 90210-4344",
-    "City": "Beverly Hills",
-    "State": "CA",
-    "Zip": "90210-4344"
+    "phone": "(310) 275-1137",
+    "address": "435 N Bedford Dr Ste 306 Beverly Hills, CA 90210-4344",
+    "city": "Beverly Hills",
+    "state": "CA",
+    "zip": "90210-4344"
     },
-    "Proximity": 
+    "proximity": 
     {
-    "Distance": "0.1",
-    "InputZip": "90210"
+    "distance": "0.1",
+    "inputZip": "90210"
     }
   }
 ]

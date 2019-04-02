@@ -211,27 +211,27 @@ for dentist_id in search_results.keys():
     data = json.loads(response.text)    
     # Put the data in JSON schema
     formated_data = {
-                    "Dentist Name": data["Name"],
-                    "Specialty": data["Specialty"],
-                    "ProfieImage_URL": data["Photo"],
+                    "dentistName": data["Name"],
+                    "specialty": data["Specialty"],
+                    "profieImage_URL": data["Photo"],
                     "website": data["WebSite"],
                     "language": data["Languages"],
-                    "Education": data["Education"][0]["Name"],
-                    "Gender": data["Gender"],
-                    "Payment Options": data["PaymentOptions"],
+                    "education": data["Education"][0]["Name"],
+                    "gender": data["Gender"],
+                    "paymentOptions": data["PaymentOptions"],
                     
-                    "Contact Info": 
+                    "contactInfo": 
                     {
-                    "Phone": data["Phone"],
-                    "Address": data["Address"],
-                    "City": data["City"],
-                    "State": data["State"],
-                    "Zip": data["Zip"]
+                    "phone": data["Phone"],
+                    "address": data["Address"],
+                    "city": data["City"],
+                    "state": data["State"],
+                    "zip": data["Zip"]
                     },
-                    "Proximity": 
+                    "proximity": 
                     {
-                    "Distance": str(search_results[dentist_id][0]),
-                    "InputZip": str(search_results[dentist_id][1])
+                    "distance": str(search_results[dentist_id][0]),
+                    "inputZip": str(search_results[dentist_id][1])
                     }
                 }
 
