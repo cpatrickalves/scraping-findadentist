@@ -1,0 +1,573 @@
+{
+    "FindDentist_Output": [
+        {
+            "dentistName": "Dr. Jeffrey S Butts",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/229367-Dr-Jeffrey-Butts.png",
+            "website": "www.campcreekdental.com",
+            "language": [],
+            "education": "Meharry Medical College",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 344-2323",
+                "address": "3886 Princeton Lakes Way Ste 220 Atlanta, GA 30331",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30331"
+            },
+            "proximity": {
+                "distance": "4.8",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr. Kimberly J Williams",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/118049-Dr-Kimberly-Williams.png",
+            "website": "www.greatexpressions.com/dental-offices/georgia-offices/cascade",
+            "language": [],
+            "education": "University of Detroit- Mercy",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(678) 836-2118",
+                "address": "3752 Cascade Rd Sw Ste 190 Atlanta, GA 30331-2149",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30331-2149"
+            },
+            "proximity": {
+                "distance": "2.1",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr Molly H Ruiz",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/339870-Dr-Molly-Ruiz.png",
+            "website": "goodsamatlanta.org",
+            "language": [],
+            "education": "Georgia Regents University",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(678) 371-5181",
+                "address": "1015 Donald Lee Hollowell Pkwy NW Atlanta, GA 30318-6653",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30318-6653"
+            },
+            "proximity": {
+                "distance": "4.7",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr. Brittany L Broomfield",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/244587-Dr-Brittany-Broomfield.png",
+            "website": "",
+            "language": [],
+            "education": "Meharry Medical College",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 752-1400",
+                "address": "868 York Ave SW Atlanta, GA 30310-2750",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30310-2750"
+            },
+            "proximity": {
+                "distance": "3.5",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr. Travon J Holt",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/198075-Dr-Travon-Holt.png",
+            "website": "www.dentistryatcampcreek.com",
+            "language": [],
+            "education": "Georgia Regents University",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 629-9290",
+                "address": "3515 Camp Creek Pkwy Ste 100 Atlanta, GA 30344-8141",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30344-8141"
+            },
+            "proximity": {
+                "distance": "5.0",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr Valerie Smith",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/307517-Dr-Valerie-Smith.png",
+            "website": "",
+            "language": [],
+            "education": "Meharry Medical College",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 768-5585",
+                "address": "989 Cleveland Ave Ste 2 Atlanta, GA 30344-6725",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30344-6725"
+            },
+            "proximity": {
+                "distance": "4.2",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr. Angela J Johnson",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/307520-Dr-Angela-Johnson.png",
+            "website": "",
+            "language": [],
+            "education": "Meharry Medical College",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 472-0425",
+                "address": "3915 Cascade Rd SW Ste 120 Atlanta, GA 30331-8519",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30331-8519"
+            },
+            "proximity": {
+                "distance": "2.4",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr Mordena T Sullen",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/308640-Dr-Mordena-Sullen.png",
+            "website": "www.mlkingdentalcenter.com",
+            "language": [],
+            "education": "Georgia Regents University",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 752-7777",
+                "address": "1099 Martin Luther King Jr Dr Atlanta, GA 30314-2943",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30314-2943"
+            },
+            "proximity": {
+                "distance": "3.6",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr Gary L Johnson",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/307519-Dr-Gary-Johnson.png",
+            "website": "",
+            "language": [],
+            "education": "Meharry Medical College",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 472-0425",
+                "address": "3915 Cascade Rd SW Ste 120 Atlanta, GA 30331-8519",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30331-8519"
+            },
+            "proximity": {
+                "distance": "2.4",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr John C Sieweke",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/308202-Dr-John-Sieweke.png",
+            "website": "goodsamatlanta.org",
+            "language": [],
+            "education": "Emory University School of Medicine",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 523-6571",
+                "address": "1015 Donald Lee Hollowell Pkwy NW Atlanta, GA 30318-6653",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30318-6653"
+            },
+            "proximity": {
+                "distance": "4.7",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr Mae T White",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/307406-Dr-Mae-White.png",
+            "website": "www.maetwhite.com",
+            "language": [],
+            "education": "Howard University",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 349-4343",
+                "address": "2291 Fairburn Rd SW Atlanta, GA 30331-5038",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30331-5038"
+            },
+            "proximity": {
+                "distance": "3.0",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr Susan F Wilborn-Hood",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/314103-Dr-Susan-Wilborn-Hood.png",
+            "website": "www.coastdental.com",
+            "language": [],
+            "education": "University of Illinois at Chicago",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(678) 891-0069",
+                "address": "3660 Cascade Rd Sw Atlanta, GA 30331-2170",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30331-2170"
+            },
+            "proximity": {
+                "distance": "1.8",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr. John E Hall",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/124219-Dr-John-Hall.png",
+            "website": "www.jehalldds.com",
+            "language": [],
+            "education": "Meharry Medical College",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 753-9742",
+                "address": "1099 Martin Luther King Jr Dr Atlanta, GA 30314-2943",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30314-2943"
+            },
+            "proximity": {
+                "distance": "3.6",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr Joseph D Murray",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/307419-Dr-Joseph-Murray.png",
+            "website": "www.drjosephmurray.com",
+            "language": [],
+            "education": "Howard University",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 762-5770",
+                "address": "967 Cleveland Ave Atlanta, GA 30344-6717",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30344-6717"
+            },
+            "proximity": {
+                "distance": "4.2",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr. Kisha N Carter",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/221947-Dr-Kisha-Carter.png",
+            "website": "www.blushdentalstudio.com",
+            "language": [
+                "English",
+                "Spanish"
+            ],
+            "education": "Georgia Regents University",
+            "gender": "Female",
+            "paymentOptions": [
+                "Accepts in-network insurance",
+                "Out-of-network, does not file claim",
+                "Out-of-network, files claim",
+                "CareCredit",
+                "Medicaid Accepted",
+                "Financing",
+                "Credit/Debit Card",
+                "Workers Comp",
+                "Cash/Check"
+            ],
+            "contactInfo": {
+                "phone": "(404) 445-6100",
+                "address": "854 Cleveland Avenue East Point, GA 30344",
+                "city": "East Point",
+                "state": "GA",
+                "zip": "30344"
+            },
+            "proximity": {
+                "distance": "4.4",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr. John T Weaver",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/ADA.png",
+            "website": "",
+            "language": [],
+            "education": "Georgia Regents University",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(440) 346-1120",
+                "address": "2797 Campbellton Rd SW Ste A4 Atlanta, GA 30311-4455",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30311-4455"
+            },
+            "proximity": {
+                "distance": "1.6",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr Walter F Young",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/ADA.png",
+            "website": "",
+            "language": [],
+            "education": "Howard University",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 753-4753",
+                "address": "2265 Cascade Rd SW Atlanta, GA 30311-2861",
+                "city": "Atlanta",
+                "state": "GA",
+                "zip": "30311-2861"
+            },
+            "proximity": {
+                "distance": "0.7",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr. Delores Hubbard-Brooks",
+            "specialty": "General Practice",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/ADA.png",
+            "website": "",
+            "language": [],
+            "education": "Meharry Medical College",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(404) 766-8559",
+                "address": "1784 Washington Ave East Point, GA 30344-4148",
+                "city": "East Point",
+                "state": "GA",
+                "zip": "30344-4148"
+            },
+            "proximity": {
+                "distance": "3.7",
+                "inputZip": "30311"
+            }
+        },
+        {
+            "dentistName": "Dr William Matoska",
+            "specialty": "Periodontics",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/279142-Dr-William-Matoska.png",
+            "website": "www.perioimplantshealthpro.com",
+            "language": [],
+            "education": "Marquette University",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(213) 481-0664",
+                "address": "1127 Wilshire Blvd Ste 1110 Los Angeles, CA 90017-4002",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "90017-4002"
+            },
+            "proximity": {
+                "distance": "1.0",
+                "inputZip": "90014"
+            }
+        },
+        {
+            "dentistName": "Dr. Jeesoo Choe",
+            "specialty": "Periodontics",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/256196-Dr-Jeesoo-Choe.png",
+            "website": "",
+            "language": [],
+            "education": "CA-University of California at Los Angeles School of Dentistry",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(310) 825-6771",
+                "address": "10833 Le Conte Ave Los Angeles, CA 90095",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "90095"
+            },
+            "proximity": {
+                "distance": "0.8",
+                "inputZip": "90014"
+            }
+        },
+        {
+            "dentistName": "Dr. David S Kao",
+            "specialty": "Periodontics",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/198414-Dr-David-Kao.png",
+            "website": "www.davidkaodds.com",
+            "language": [
+                "Chinese",
+                "English",
+                "Filipino",
+                "Spanish"
+            ],
+            "education": "University of California-Los Angeles",
+            "gender": "Male",
+            "paymentOptions": [
+                "Accepts in-network insurance",
+                "Cash/Check",
+                "Credit/Debit Card",
+                "Financing",
+                "Out-of-network, does not file claim",
+                "Out-of-network, files claim",
+                "CareCredit",
+                "Medicaid Accepted",
+                "Workers Comp"
+            ],
+            "contactInfo": {
+                "phone": "(213) 250-7554",
+                "address": "1127 Wilshire Blvd Ste 903 Los Angeles, CA 90017-3910",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "90017-3910"
+            },
+            "proximity": {
+                "distance": "1.0",
+                "inputZip": "90014"
+            }
+        },
+        {
+            "dentistName": "Dr. Leshin Chen",
+            "specialty": "Periodontics",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/198392-Dr-Leshin-Chen.png",
+            "website": "",
+            "language": [
+                "English",
+                "Spanish",
+                "Chinese",
+                "Japanese"
+            ],
+            "education": "University of California-Los Angeles",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(213) 481-2699",
+                "address": "1127 Wilshire Blvd Ste 812 Los Angeles, CA 90017-3909",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "90017-3909"
+            },
+            "proximity": {
+                "distance": "1.0",
+                "inputZip": "90014"
+            }
+        },
+        {
+            "dentistName": "Dr Joan Otomo-Corgel",
+            "specialty": "Periodontics",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/280406-Dr-Joan-Otomo-Corgel.png",
+            "website": "www.perioimplanthealthpro.com",
+            "language": [
+                "English",
+                "Filipino",
+                "Japanese",
+                "Spanish"
+            ],
+            "education": "University of California-Los Angeles",
+            "gender": "Female",
+            "paymentOptions": [
+                "CareCredit",
+                "Accepts in-network insurance",
+                "Cash/Check",
+                "Credit/Debit Card",
+                "Financing"
+            ],
+            "contactInfo": {
+                "phone": "(213) 481-0664",
+                "address": "1127 Wilshire Blvd Ste 1110 Los Angeles, CA 90017-4002",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "90017-4002"
+            },
+            "proximity": {
+                "distance": "0.9",
+                "inputZip": "90014"
+            }
+        },
+        {
+            "dentistName": "Dr Henry H Takei",
+            "specialty": "Periodontics",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/279139-Dr-Henry-Takei.png",
+            "website": "www.lawilshireperio.com",
+            "language": [],
+            "education": "Marquette University",
+            "gender": "Male",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(213) 481-2699",
+                "address": "1127 Wilshire Blvd Ste 812 Los Angeles, CA 90017-3909",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "90017-3909"
+            },
+            "proximity": {
+                "distance": "1.0",
+                "inputZip": "90014"
+            }
+        },
+        {
+            "dentistName": "Dr Robin Wakabayashi",
+            "specialty": "Periodontics",
+            "profieImage_URL": "findadentist.ada.org/Images/Profile/ADA.png",
+            "website": "",
+            "language": [],
+            "education": "CA-University of California at San Francisco School of Dentistry",
+            "gender": "Female",
+            "paymentOptions": [],
+            "contactInfo": {
+                "phone": "(213) 626-0561",
+                "address": "420 E 3rd St Suite 702 Los Angeles, CA 90013-1647",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "90013-1647"
+            },
+            "proximity": {
+                "distance": "0.6",
+                "inputZip": "90014"
+            }
+        }
+    ]
+}
