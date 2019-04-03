@@ -1,6 +1,6 @@
 # Scraping findadentist.ada.org
 
-This project contains a set of Python scripts used to scrape the dentist's data from findadentist.ada.org.
+This project contains a set of Python scripts used to scrape the dentist's data from [findadentist.ada.org](https://findadentist.ada.org/).
 
 ## Prerequisites
 
@@ -10,15 +10,16 @@ After install, you need to install some Python packages.
 Open the terminal/Prompt/cmd and run:
 ```
 pip install -r requirements.txt
-
 ```
 ## Usage
 
 Script name: **findadentist.py**
 
+This script takes a JSON file as an input. This file contains data to perform searches in findadentist.ada.org.
+
+How to use: 
 ```
 python findadentist.py data/input2.json
-
 ```
 
 This script performs several requests to the *findadentist.ada.org API* to get the dentist's data.
@@ -103,9 +104,9 @@ In this example, I set *proxy_server_options = 1*.
 
 ## Using Docker
 
-You can build a docker container for this project and run it as a App.
+You can build a Docker container for this project and run it as an *app*.
 
-You the project directory there is a Dockerfile with all docker settings to build the docker image.
+In the project directory there is a *Dockerfile* with all docker settings to build the docker image.
 
 To build the image, in the project directory run:
 
@@ -114,6 +115,7 @@ docker build -t scraping-findadentist .
 ```
 
 A ready-to-use image can be obtained from this [link](https://drive.google.com/file/d/1MCAi2fjrjL_rMcYB-Np-EmP8onfGjnE0/view?usp=sharing).
+
 In this case you need to load the image in Docker:
 
 ```
@@ -126,14 +128,15 @@ To run the image:
 docker run --name findadentist_app scraping-findadentist
 ```
 
-The output file created by the app (output.json) was saved inside the container filesystem.
-To copy this file for your local host run:
+The output file created by the app (*output.json*) was saved inside the container filesystem.
+
+To copy this file to your local filesystem run:
 
 ```
 docker cp findadentist_app:/output.json output.json
 ```
 
-Then, stop the container instance:
+Finally, stop the container instance:
 
 ```
 docker stop findadentist_app
