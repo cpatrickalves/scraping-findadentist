@@ -32,7 +32,7 @@ def get_proxies_pool(proxy_server_options):
         if response.status_code != 200:
             logger.error('Failed to get Proxies list in {}'.format(proxy_server_url))
 
-        soup = BeautifulSoup(response.text,"lxml")
+        soup = BeautifulSoup(response.text,"html.parser")
         # Filter to get only HTTPS proxies
         https_proxies = filter(lambda item: "yes" in item.text,
                             soup.select("table.table tr"))
