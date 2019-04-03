@@ -101,6 +101,44 @@ In this example, I set *proxy_server_options = 1*.
 
 ```
 
+## Using Docker
+
+You can build a docker container for this project and run it as a App.
+
+You the project directory there is a Dockerfile with all docker settings to build the docker image.
+
+To build the image, in the project directory run:
+
+```
+docker build -t scraping-findadentist .
+```
+
+A ready-to-use image can be obtained from this [link](https://drive.google.com/file/d/1MCAi2fjrjL_rMcYB-Np-EmP8onfGjnE0/view?usp=sharing).
+In this case you need to load the image in Docker:
+
+```
+docker load -i <path to image tar file>
+```
+
+To run the image:
+
+```
+docker run --name findadentist_app scraping-findadentist
+```
+
+The output file created by the app (output.json) was saved inside the container filesystem.
+To copy this file for your local host run:
+
+```
+docker cp findadentist_app:/output.json output.json
+```
+
+Then, stop the container instance:
+
+```
+docker stop findadentist_app
+```
+
 ## License
 
 This project is licensed under the Apache License Version 2.0 - see the [LICENSE.md](LICENSE) file for details.
