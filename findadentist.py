@@ -33,6 +33,7 @@ def make_request(url, proxy_pool):
 
     # Number of times the script will retry a request after a error/blocking
     request_retries_limit = 10 
+    if proxy_server_options == 2: request_retries_limit = 50 
     # Retries counter                                
     request_retries_counter = 0    
 
@@ -123,7 +124,7 @@ if (len(sys.argv) < 2):
 # 0 - Do not use Proxy
 # 1 - Uses proxy.proxycrawl.com service (recommended)
 # 2 - Uses www.sslproxies.org service
-proxy_server_options = 1
+proxy_server_options = 2
 proxy_pool = None
 
 # Starting scraping
