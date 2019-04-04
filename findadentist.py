@@ -20,7 +20,7 @@ from proxy_pool import get_proxies_pool
 
 
 # Function that makes the requests to the findadentist.ada.org API
-def make_request(url, proxy_pool):
+def make_request(url, proxy_pool, proxy_server_options):
 
     # Default number of seconds to wait between 
     wait_time = 2                                        
@@ -115,7 +115,12 @@ def make_request(url, proxy_pool):
 
 
 # Function that's performs search for dentists based on three parameters: specialty, Distance and Address
-def search_dentists(input_data):
+def search_dentists(input_data, proxy_server_options):
+
+    # Setup Proxy
+    proxy_pool = None
+    if proxy_server_options != 0:     
+        proxy_pool = get_proxies_pool(proxy_server_options)    
 
     # Dentist's specialty code mapping
     # All specialty are mapped to a code before request the data
@@ -147,7 +152,7 @@ def search_dentists(input_data):
         # Make the search request
         logger.info("Performing search {}/{} - requested page: {}".format(searchs_counter, total_searchs, url))
         searchs_counter += 1
-        response = make_request(url, proxy_pool)
+        response = make_request(url, proxy_pool, proxy_server_options)
         
         # Load the data in a dict object
         data = json.loads(response.text)
@@ -173,11 +178,16 @@ def search_dentists(input_data):
 
 # This function receives a dict with dentists AddressID (as a dict key), distance and inputZip data taken
 # from the search results and produce requests to the website API to get the data.
-def get_dentists_data(search_results):
+def get_dentists_data(search_results, proxy_server_options):
     # Scraping dentists data
     # Get the dentist's data from website API using the AddressIDs
     dentists_counter = 1
     dentists_data = [] # List object that saves the dentist's data
+
+    # Setup Proxy
+    proxy_pool = None
+    if proxy_server_options != 0:     
+        proxy_pool = get_proxies_pool(proxy_server_options)    
 
     # Scraping data for each dentist ID
     logger.info("Getting data for {} dentists".format(len(search_results)))
@@ -186,7 +196,7 @@ def get_dentists_data(search_results):
         logger.info("Getting data for dentist ID {} - {}/{}".format(dentist_id, dentists_counter, len(search_results)))
         dentists_counter += 1
         url = "https://findadentist.ada.org/api/DentistProfile?AddressId={}".format(dentist_id)
-        response = make_request(url, proxy_pool)
+        response = make_request(url, proxy_pool, proxy_server_options)
             
         # Saving dentist's data
         data = json.loads(response.text)    
@@ -222,49 +232,53 @@ def get_dentists_data(search_results):
     return dentists_data
 
 
-# Check if the input file was in the command parameters
-if (len(sys.argv) < 2):
-    logger.error("Missing input file! You need to pass the JSON input file as a script's parameter.")
-    logger.error('<usage>: python findadentist.py inputfile.json')
-    sys.exit()
+# Main function
+def main():
+    # Check if the input file was in the command parameters
+    if (len(sys.argv) < 2):
+        logger.error("Missing input file! You need to pass the JSON input file as a script's parameter.")
+        logger.error('<usage>: python findadentist.py inputfile.json')
+        sys.exit()
 
-# Set the Proxy option to be used:
-# 0 - Do not use Proxy
-# 1 - Uses proxy.proxycrawl.com service (recommended)
-# 2 - Uses www.sslproxies.org service
-proxy_server_options = 2
-proxy_pool = None
+    # Set the Proxy option to be used:
+    # 0 - Do not use Proxy
+    # 1 - Uses proxy.proxycrawl.com service (recommended)
+    # 2 - Uses www.sslproxies.org service
+    proxy_server_options = 2
+   
+    # Starting scraping
+    start_time = datetime.today()
+    logger.info('Starting findadentist.py script ...')
+   
+    # Load JSON file with input data
+    logger.info("Loading input file: {}".format(sys.argv[1]))
+    try:
+        with open(sys.argv[1]) as json_file:  
+            input_data = json.load(json_file)
 
-# Starting scraping
-start_time = datetime.today()
-logger.info('Starting findadentist.py script ...')
-if proxy_server_options != 0:     
-    proxy_pool = get_proxies_pool(proxy_server_options)    
-
-# Load JSON file with input data
-logger.info("Loading input file: {}".format(sys.argv[1]))
-try:
-    with open(sys.argv[1]) as json_file:  
-        input_data = json.load(json_file)
-
-except Exception as exc:
-    logger.error(str(exc))
-    sys.exit()
+    except Exception as exc:
+        logger.error(str(exc))
+        sys.exit()
 
 
-# Perform a search in the findadentist.ada.org using the parameters in JSON file
-search_results = search_dentists(input_data)
-# Get the dentist data from the search results
-dentists_data = get_dentists_data(search_results)
-    
-# Saving the data in a JSON file
-output_data = {"FindDentist_Output": dentists_data}
-output_filename = 'output.json'
-logger.debug("Saving the data in {} file".format(output_filename))
-with open(output_filename, 'w', encoding='utf-8') as outfile:
-    json.dump(output_data, outfile, indent=4)
+    # Perform a search in the findadentist.ada.org using the parameters in JSON file
+    search_results = search_dentists(input_data, proxy_server_options)
+    # Get the dentist data from the search results
+    dentists_data = get_dentists_data(search_results, proxy_server_options) 
+        
+    # Saving the data in a JSON file
+    output_data = {"FindDentist_Output": dentists_data}
+    output_filename = 'output.json'
+    logger.debug("Saving the data in {} file".format(output_filename))
+    with open(output_filename, 'w', encoding='utf-8') as outfile:
+        json.dump(output_data, outfile, indent=4)
 
-# Compute scraping time
-time_elapsed = (datetime.today() - start_time).total_seconds()
-logger.info("Total scraping time: {} minutes".format(round(time_elapsed/60,2)))
-logger.debug("scraping finished")
+    # Compute scraping time
+    time_elapsed = (datetime.today() - start_time).total_seconds()
+    logger.info("Total scraping time: {} minutes".format(round(time_elapsed/60,2)))
+    logger.debug("scraping finished")
+
+
+# Running the script
+if __name__ == "__main__":
+    main()
