@@ -114,6 +114,63 @@ def make_request(url, proxy_pool):
     return response
 
 
+# Function that's performs search for dentist's based on three parameters: specialty, Distance and Address
+def search_dentists(input_data):
+
+    # Dentist's specialty code mapping
+    # All specialty are mapped to a code before request the data
+    specialty = {"General Practice": 1,
+                "Oral and Maxillofacial Surgery": 2,
+                "Endodontics": 3,
+                "Orthodontics and Dentofacial Orthopedics": 4, 
+                "Orthodontics": 4,
+                "Pediatric Dentistry": 5,
+                "Periodontics": 6,
+                "Prosthodontics": 7,
+                "Oral and Maxillofacial Pathology": 8,
+                "Dental Public Health": 9,
+                "Oral and Maxillofacial Radiology": 10
+                }
+
+    # Useful Variables
+    search_results = {}                                     # Saves the dentists Ids, Distances and InputZip codes.
+    total_searchs = len(input_data['FindDentist_Input'])    # Number of searchs to be performed
+    searchs_counter = 1                                     
+
+    # Loop through input data searchs for the dentists and saves each Dentist AddressId
+    for inputs in input_data['FindDentist_Input']:
+        
+        # Building URL
+        url = 'https://findadentist.ada.org/api/Dentists?Address={}&Specialty={}&Distance={}'.format(inputs['zip code'], 
+                                                                                                    specialty[inputs['specialty']], 
+                                                                                                    inputs['distance'])
+        # Make the search request
+        logger.info("Performing search {}/{} - requested page: {}".format(searchs_counter, total_searchs, url))
+        searchs_counter += 1
+        response = make_request(url, proxy_pool)
+        
+        # Load the data in a dict object
+        data = json.loads(response.text)
+        
+        # If no results found, show the message: “No result found”
+        if 'Dentists' not in data.keys():
+            logger.warn("No results found for the search parameters: Address={}  Specialty={}  Distance={}".format(inputs['zip code'], 
+                                                                                                    specialty[inputs['specialty']], 
+                                                                                                    inputs['distance']))
+            continue
+        
+        logger.info("{} dentists found.".format(len(data["Dentists"])))
+
+        # Saves the Address Ids as dict keys and Distances and InputZip codes a list.
+        for dentist in data["Dentists"]:
+            if dentist["AddressId"] not in search_results.keys():
+                search_results[dentist["AddressId"]] = [dentist["Distance"], inputs['zip code']] 
+            
+    logger.info("A total of {} dentists IDs obtained".format(len(search_results)))
+
+    return search_results
+
+
 # Check if the input file was in the command parameters
 if (len(sys.argv) < 2):
     logger.error("Missing input file! You need to pass the JSON input file as a script's parameter.")
@@ -143,56 +200,9 @@ except Exception as exc:
     logger.error(str(exc))
     sys.exit()
 
-# Dentist's specialty code mapping
-# All specialty are mapped to a code before request the data
-specialty = {"General Practice": 1,
-            "Oral and Maxillofacial Surgery": 2,
-            "Endodontics": 3,
-            "Orthodontics and Dentofacial Orthopedics": 4, 
-            "Orthodontics": 4,
-            "Pediatric Dentistry": 5,
-            "Periodontics": 6,
-            "Prosthodontics": 7,
-            "Oral and Maxillofacial Pathology": 8,
-            "Dental Public Health": 9,
-            "Oral and Maxillofacial Radiology": 10
-            }
 
-# Useful Variables
-search_results = {}                                     # Saves the dentists Ids, Distances and InputZip codes.
-total_searchs = len(input_data['FindDentist_Input'])    # Number of searchs to be performed
-searchs_counter = 1                                     
-
-# Loop through input data searchs for the dentists and saves each Dentist AddressId
-for inputs in input_data['FindDentist_Input']:
-    
-    # Building URL
-    url = 'https://findadentist.ada.org/api/Dentists?Address={}&Specialty={}&Distance={}'.format(inputs['zip code'], 
-                                                                                                 specialty[inputs['specialty']], 
-                                                                                                 inputs['distance'])
-    # Make the search request
-    logger.info("Performing search {}/{} - requested page: {}".format(searchs_counter, total_searchs, url))
-    searchs_counter += 1
-    response = make_request(url, proxy_pool)
-    
-    # Load the data in a dict object
-    data = json.loads(response.text)
-    
-    # If no results found, show the message: “No result found”
-    if 'Dentists' not in data.keys():
-        logger.warn("No results found for the search parameters: Address={}  Specialty={}  Distance={}".format(inputs['zip code'], 
-                                                                                                 specialty[inputs['specialty']], 
-                                                                                                 inputs['distance']))
-        continue
-    
-    logger.info("{} dentists found.".format(len(data["Dentists"])))
-
-    # Saves the Address Ids as dict keys and Distances and InputZip codes a list.
-    for dentist in data["Dentists"]:
-        if dentist["AddressId"] not in search_results.keys():
-            search_results[dentist["AddressId"]] = [dentist["Distance"], inputs['zip code']] 
-        
-logger.info("A total of {} dentists IDs obtained".format(len(search_results)))
+# Perform a search in the findadentist.ada.org using the parameters in JSON file
+search_results = search_dentists(input_data)
 
 # Scraping dentists data
 # Get the dentist's data from website API using the AddressIDs
