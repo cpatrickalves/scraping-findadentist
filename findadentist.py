@@ -114,7 +114,7 @@ def make_request(url, proxy_pool):
     return response
 
 
-# Function that's performs search for dentist's based on three parameters: specialty, Distance and Address
+# Function that's performs search for dentists based on three parameters: specialty, Distance and Address
 def search_dentists(input_data):
 
     # Dentist's specialty code mapping
@@ -171,6 +171,57 @@ def search_dentists(input_data):
     return search_results
 
 
+# This function receives a dict with dentists AddressID (as a dict key), distance and inputZip data taken
+# from the search results and produce requests to the website API to get the data.
+def get_dentists_data(search_results):
+    # Scraping dentists data
+    # Get the dentist's data from website API using the AddressIDs
+    dentists_counter = 1
+    dentists_data = [] # List object that saves the dentist's data
+
+    # Scraping data for each dentist ID
+    logger.info("Getting data for {} dentists".format(len(search_results)))
+    for dentist_id in search_results.keys():
+        # Make request
+        logger.info("Getting data for dentist ID {} - {}/{}".format(dentist_id, dentists_counter, len(search_results)))
+        dentists_counter += 1
+        url = "https://findadentist.ada.org/api/DentistProfile?AddressId={}".format(dentist_id)
+        response = make_request(url, proxy_pool)
+            
+        # Saving dentist's data
+        data = json.loads(response.text)    
+        # Put the data in JSON schema
+        formated_data = {
+                        "dentistName": data["Name"],
+                        "specialty": data["Specialty"],
+                        "profieImage_URL": data["Photo"],
+                        "website": data["WebSite"],
+                        "language": data["Languages"],
+                        "education": data["Education"][0]["Name"],
+                        "gender": data["Gender"],
+                        "paymentOptions": data["PaymentOptions"],
+                        
+                        "contactInfo": 
+                        {
+                        "phone": data["Phone"],
+                        "address": data["Address"],
+                        "city": data["City"],
+                        "state": data["State"],
+                        "zip": data["Zip"]
+                        },
+                        "proximity": 
+                        {
+                        "distance": str(search_results[dentist_id][0]),
+                        "inputZip": str(search_results[dentist_id][1])
+                        }
+                    }
+
+        # Saving the data in the list
+        dentists_data.append(formated_data)
+
+    return dentists_data
+
+
 # Check if the input file was in the command parameters
 if (len(sys.argv) < 2):
     logger.error("Missing input file! You need to pass the JSON input file as a script's parameter.")
@@ -203,51 +254,8 @@ except Exception as exc:
 
 # Perform a search in the findadentist.ada.org using the parameters in JSON file
 search_results = search_dentists(input_data)
-
-# Scraping dentists data
-# Get the dentist's data from website API using the AddressIDs
-dentists_counter = 1
-dentists_data = [] # List object that saves the dentist's data
-
-# Scraping data for each dentist ID
-logger.info("Getting data for {} dentists".format(len(search_results)))
-for dentist_id in search_results.keys():
-    # Make request
-    logger.info("Getting data for dentist ID {} - {}/{}".format(dentist_id, dentists_counter, len(search_results)))
-    dentists_counter += 1
-    url = "https://findadentist.ada.org/api/DentistProfile?AddressId={}".format(dentist_id)
-    response = make_request(url, proxy_pool)
-        
-    # Saving dentist's data
-    data = json.loads(response.text)    
-    # Put the data in JSON schema
-    formated_data = {
-                    "dentistName": data["Name"],
-                    "specialty": data["Specialty"],
-                    "profieImage_URL": data["Photo"],
-                    "website": data["WebSite"],
-                    "language": data["Languages"],
-                    "education": data["Education"][0]["Name"],
-                    "gender": data["Gender"],
-                    "paymentOptions": data["PaymentOptions"],
-                    
-                    "contactInfo": 
-                    {
-                    "phone": data["Phone"],
-                    "address": data["Address"],
-                    "city": data["City"],
-                    "state": data["State"],
-                    "zip": data["Zip"]
-                    },
-                    "proximity": 
-                    {
-                    "distance": str(search_results[dentist_id][0]),
-                    "inputZip": str(search_results[dentist_id][1])
-                    }
-                }
-
-    # Saving the data in the list
-    dentists_data.append(formated_data)
+# Get the dentist data from the search results
+dentists_data = get_dentists_data(search_results)
     
 # Saving the data in a JSON file
 output_data = {"FindDentist_Output": dentists_data}
